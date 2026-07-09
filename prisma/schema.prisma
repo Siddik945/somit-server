@@ -13,13 +13,52 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id     Int     @id @default(autoincrement())
+  name   String?
+  role   String?
+
+  kistis Kisti[]
+
+  @@map("users")
 }
 
-model Order {
-  id       Int    @id @default(autoincrement())
-  product  String
-  price    Float
+model Amount {
+  id     Int      @id @default(autoincrement())
+  date   DateTime?
+  amount Int?
+  status String?
+
+  kistis Kisti[]
+
+  @@map("amounts")
+}
+
+model Kisti {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  amountId     Int      @map("amount_id")
+  date         DateTime
+  totalDue     Int      @default(0) @map("total_due")
+  jorimana     Int      @default(0)
+  currentKisti Int      @default(0) @map("current_kisti")
+  total        Int      @default(0)
+  joma         Int      @default(0)
+  currentDue   Int      @default(0) @map("current_due")
+
+  user         User     @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  amount       Amount   @relation(
+    fields: [amountId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@unique([userId, date])
+  @@index([date])
+  @@index([amountId])
+  @@map("kistis")
 }

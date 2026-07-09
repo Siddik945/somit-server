@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { UsersModule } from './users/users.module';
-import { OrdersModule } from './orders/orders.module';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
+import { AmountsModule } from './amounts/amounts.module';
+import { KistisModule } from './kistis/kistis.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { ConfigModule } from '@nestjs/config';
     }),
     PrismaModule,
     UsersModule,
-    OrdersModule,
+    AmountsModule,
+    KistisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
