@@ -3,10 +3,10 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { GenerateKistiDto } from "./dto/generate-kisti.dto";
-import { UpdateDepositDto } from "./dto/update-deposit.dto";
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { GenerateKistiDto } from './dto/generate-kisti.dto';
+import { UpdateDepositDto } from './dto/update-deposit.dto';
 
 @Injectable()
 export class KistisService {
@@ -24,7 +24,7 @@ export class KistisService {
     const date = new Date(dateValue);
 
     if (Number.isNaN(date.getTime())) {
-      throw new BadRequestException("Invalid date");
+      throw new BadRequestException('Invalid date');
     }
 
     const monthStart = new Date(
@@ -63,19 +63,19 @@ export class KistisService {
         },
       },
       orderBy: {
-        date: "desc",
+        date: 'desc',
       },
     });
 
     if (!amount) {
       throw new NotFoundException(
-        "No installment amount was found for the selected month",
+        'No installment amount was found for the selected month',
       );
     }
 
     if (amount.amount === null) {
       throw new BadRequestException(
-        "The selected Amount record does not contain an amount",
+        'The selected Amount record does not contain an amount',
       );
     }
 
@@ -93,7 +93,7 @@ export class KistisService {
     const [users, monthlyAmount] = await Promise.all([
       this.prisma.user.findMany({
         orderBy: {
-          id: "asc",
+          id: 'asc',
         },
       }),
       this.findMonthlyAmount(date),
@@ -127,7 +127,7 @@ export class KistisService {
         },
       },
       orderBy: {
-        date: "desc",
+        date: 'desc',
       },
     });
 
@@ -189,7 +189,7 @@ export class KistisService {
     const preview = await this.preview(generateKistiDto.date);
 
     if (preview.totalUsers === 0) {
-      throw new BadRequestException("No users were found");
+      throw new BadRequestException('No users were found');
     }
 
     /*
@@ -206,7 +206,7 @@ export class KistisService {
 
     if (existingCount > 0) {
       throw new ConflictException(
-        "Kisti records have already been generated for this month",
+        'Kisti records have already been generated for this month',
       );
     }
 
@@ -232,7 +232,7 @@ export class KistisService {
     });
 
     return {
-      message: "Kisti records generated successfully",
+      message: 'Kisti records generated successfully',
       date: selectedDate,
       amountId: preview.amountId,
       totalCreated: records.length,
@@ -248,14 +248,14 @@ export class KistisService {
 
     // Beginning of the starting month
     if (startMonth) {
-      const { year, month } = this.parseMonth(startMonth, "startMonth");
+      const { year, month } = this.parseMonth(startMonth, 'startMonth');
 
       dateFilter.gte = new Date(Date.UTC(year, month - 1, 1));
     }
 
     // Beginning of the month after the ending month
     if (endMonth) {
-      const { year, month } = this.parseMonth(endMonth, "endMonth");
+      const { year, month } = this.parseMonth(endMonth, 'endMonth');
 
       dateFilter.lt = new Date(Date.UTC(year, month, 1));
     }
@@ -263,7 +263,7 @@ export class KistisService {
     // Prevent an invalid range
     if (dateFilter.gte && dateFilter.lt && dateFilter.gte >= dateFilter.lt) {
       throw new BadRequestException(
-        "startMonth must be before or equal to endMonth",
+        'startMonth must be before or equal to endMonth',
       );
     }
 
@@ -287,10 +287,10 @@ export class KistisService {
 
       orderBy: [
         {
-          date: "desc",
+          date: 'desc',
         },
         {
-          userId: "asc",
+          userId: 'asc',
         },
       ],
     });
@@ -335,7 +335,7 @@ export class KistisService {
         amount: true,
       },
       orderBy: {
-        userId: "asc",
+        userId: 'asc',
       },
     });
 
@@ -405,7 +405,7 @@ export class KistisService {
 
     if (deposit > total) {
       throw new BadRequestException(
-        "Deposit cannot be greater than the total payable amount",
+        'Deposit cannot be greater than the total payable amount',
       );
     }
 
@@ -429,7 +429,7 @@ export class KistisService {
     });
 
     return {
-      message: "Deposit updated successfully",
+      message: 'Deposit updated successfully',
       id: updatedRecord.id,
       userId: updatedRecord.userId,
       name: updatedRecord.user.name,
@@ -440,7 +440,7 @@ export class KistisService {
   }
 
   async removeByMonth(month: string) {
-    const [year, monthNumber] = month.split("-").map(Number);
+    const [year, monthNumber] = month.split('-').map(Number);
 
     const startDate = new Date(Date.UTC(year, monthNumber - 1, 1, 0, 0, 0, 0));
 

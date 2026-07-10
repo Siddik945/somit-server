@@ -10,4 +10,14 @@ export class CreateUserDto {
     example: 'member',
   })
   role?: string;
+
+  @ApiPropertyOptional({
+    example: 'rahim@example.com',
+  })
+  email?: string;
+
+  @ApiPropertyOptional({
+    example: 'password123',
+  })
+  password?: string;
 }

@@ -12,10 +12,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
 model User {
-  id     Int     @id @default(autoincrement())
-  name   String?
-  role   String?
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String? @unique
+  password String?
+  role     Role    @default(MEMBER)
 
   kistis Kisti[]
 
@@ -45,17 +53,9 @@ model Kisti {
   joma         Int      @default(0)
   currentDue   Int      @default(0) @map("current_due")
 
-  user         User     @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade
-  )
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  amount       Amount   @relation(
-    fields: [amountId],
-    references: [id],
-    onDelete: Cascade
-  )
+  amount       Amount   @relation(fields: [amountId], references: [id], onDelete: Cascade)
 
   @@unique([userId, date])
   @@index([date])

@@ -9,7 +9,7 @@ export class UsersService {
 
   create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
-      data: createUserDto,
+      data: createUserDto as any,
     });
   }
 
@@ -33,13 +33,19 @@ export class UsersService {
   update(id: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id },
-      data: updateUserDto,
+      data: updateUserDto as any,
     });
   }
 
   remove(id: number) {
     return this.prisma.user.delete({
       where: { id },
+    });
+  }
+
+  findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
     });
   }
 }

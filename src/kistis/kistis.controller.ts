@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
@@ -24,9 +25,13 @@ import { KistisService } from "./kistis.service";
 import { GenerateKistiDto } from "./dto/generate-kisti.dto";
 import { PreviewKistiQueryDto } from "./dto/preview-kisti-query.dto";
 import { UpdateDepositDto } from "./dto/update-deposit.dto";
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 @ApiTags("Kistis")
 @Controller("kistis")
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class KistisController {
   constructor(private readonly kistisService: KistisService) {}
 
@@ -37,6 +42,7 @@ export class KistisController {
    * GET /kistis/preview?date=2026-06-16
    */
   @Get("preview")
+  @Roles('ADMIN', 'MODERATOR')
   @ApiOperation({
     summary: "Preview all users and calculated Kisti information",
     description:
@@ -62,6 +68,7 @@ export class KistisController {
    * Saves Kisti records for all users.
    */
   @Post("generate")
+  @Roles('ADMIN')
   @ApiOperation({
     summary: "Generate and save Kisti records for all users",
   })
@@ -80,6 +87,7 @@ export class KistisController {
   }
 
   @Get()
+  @Roles('ADMIN', 'MODERATOR', 'MEMBER')
   @ApiOperation({
     summary: "Get all Kisti records by month range",
   })
@@ -108,6 +116,7 @@ export class KistisController {
    * This route must appear before @Get(':id').
    */
   @Get("by-date")
+  @Roles('ADMIN', 'MODERATOR', 'MEMBER')
   @ApiOperation({
     summary: "Get saved Kisti records for a selected month",
   })
@@ -121,6 +130,7 @@ export class KistisController {
   }
 
   @Get(":id")
+  @Roles('ADMIN', 'MODERATOR', 'MEMBER')
   @ApiOperation({
     summary: "Get one Kisti record",
   })
@@ -133,6 +143,7 @@ export class KistisController {
   }
 
   @Patch(":id/deposit")
+  @Roles('ADMIN', 'MODERATOR')
   @ApiOperation({
     summary: "Update deposit and automatically recalculate current due",
   })
@@ -158,6 +169,7 @@ export class KistisController {
    * DELETE /kistis/by-month?month=2026-06
    */
   @Delete("by-month")
+  @Roles('ADMIN')
   @ApiOperation({
     summary: "Delete all Kisti records of a selected month",
   })

@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AmountsModule } from './amounts/amounts.module';
 import { KistisModule } from './kistis/kistis.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { KistisModule } from './kistis/kistis.module';
     UsersModule,
     AmountsModule,
     KistisModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
