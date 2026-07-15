@@ -23,6 +23,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
     const { password: _, ...result } = user;
+    
+    // Ensure role is properly populated with permissions
+    if (!result.role) {
+      throw new UnauthorizedException('User has no role assigned');
+    }
+    
     return result;
   }
 }

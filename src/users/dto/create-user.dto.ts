@@ -7,9 +7,9 @@ export class CreateUserDto {
   name?: string;
 
   @ApiPropertyOptional({
-    example: 'member',
+    example: 1,
   })
-  role?: string;
+  roleId?: number;
 
   @ApiPropertyOptional({
     example: 'rahim@example.com',

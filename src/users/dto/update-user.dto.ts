@@ -2,6 +2,11 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateUserDto {
   @ApiPropertyOptional({
+    example: 1,
+  })
+  id?: number;
+
+  @ApiPropertyOptional({
     example: 'Rahim',
   })
   name?: string;

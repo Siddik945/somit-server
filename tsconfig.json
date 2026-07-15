@@ -10,8 +10,12 @@
 
     // 🔥 IMPORTANT FIX
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/client": ["./generated/prisma"]
+    }
   },
-  "include": ["src", "generated/prisma"],
+  "include": ["src", "generated/prisma", "prisma"],
   "exclude": ["node_modules", "dist"]
 }
